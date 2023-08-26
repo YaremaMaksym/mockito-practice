@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -32,5 +31,27 @@ class PokemonRepositoryTest {
         // Then
         assertThat(savedPokemon).isNotNull();
         assertThat(savedPokemon.getId()).isGreaterThan(0);
+    }
+
+    @Test
+    void itShouldReturnMoreThanOnePokemon() {
+        // Given
+        Pokemon pokemon1 = Pokemon.builder()
+                .name("Pikachu1")
+                .type("Electric").build();
+
+        Pokemon pokemon2 = Pokemon.builder()
+                .name("Pikachu2")
+                .type("Electric").build();
+
+        pokemonRepository.save(pokemon1);
+        pokemonRepository.save(pokemon2);
+
+        // When
+        List<Pokemon> list = pokemonRepository.findAll();
+
+        // Then
+        assertThat(list).isNotNull();
+        assertThat(list.size()).isEqualTo(2);
     }
 }
