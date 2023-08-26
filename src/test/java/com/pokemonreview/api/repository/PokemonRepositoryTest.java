@@ -54,4 +54,20 @@ class PokemonRepositoryTest {
         assertThat(list).isNotNull();
         assertThat(list.size()).isEqualTo(2);
     }
+
+    @Test
+    void itShouldFindPokemonById() {
+        // Given
+        Pokemon pokemon = Pokemon.builder()
+                .name("Pikachu")
+                .type("Electric").build();
+
+        pokemonRepository.save(pokemon);
+
+        // When
+        Pokemon pokemonReturn = pokemonRepository.findById(pokemon.getId()).get();
+
+        // Then
+        assertThat(pokemonReturn).isNotNull();
+    }
 }
