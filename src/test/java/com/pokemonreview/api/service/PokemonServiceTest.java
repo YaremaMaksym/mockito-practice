@@ -79,4 +79,32 @@ public class PokemonServiceTest {
         assertThat(pokemonReturn).usingRecursiveComparison()
                 .isEqualTo(pokemon);
     }
+
+    @Test
+    void updatePokemon_ReturnsResponseDto() {
+        // Given
+        int id = 10;
+        Pokemon pokemon = Pokemon.builder()
+                .name("Pikachu")
+                .type("Electric").build();
+        Pokemon pokemonUpdated = Pokemon.builder()
+                .name("Raichu")
+                .type("Electric").build();
+        PokemonDto pokemonDtoUpdated = PokemonDto.builder()
+                .name("Raichu")
+                .type("Electric").build();
+
+        // When
+        when(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .thenReturn(Optional.ofNullable(pokemon));
+
+        when(pokemonRepository.save(Mockito.any(Pokemon.class)))
+                .thenReturn(pokemonUpdated);
+
+        PokemonDto pokemonReturn = pokemonService.updatePokemon(pokemonDtoUpdated, id);
+
+        // Then
+        assertThat(pokemonReturn).usingRecursiveComparison()
+                .isEqualTo(pokemonDtoUpdated);
+    }
 }
