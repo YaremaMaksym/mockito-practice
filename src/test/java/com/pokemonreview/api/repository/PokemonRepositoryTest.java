@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -29,8 +30,8 @@ class PokemonRepositoryTest {
         Pokemon savedPokemon = pokemonRepository.save(pokemon);
 
         // Then
-        assertThat(savedPokemon).isNotNull();
-        assertThat(savedPokemon.getId()).isGreaterThan(0);
+        assertThat(savedPokemon).usingRecursiveComparison()
+                .isEqualTo(pokemon);
     }
 
     @Test
@@ -68,6 +69,7 @@ class PokemonRepositoryTest {
         Pokemon pokemonReturn = pokemonRepository.findById(pokemon.getId()).get();
 
         // Then
-        assertThat(pokemonReturn).isNotNull();
+        assertThat(pokemonReturn).usingRecursiveComparison()
+                .isEqualTo(pokemon);
     }
 }
