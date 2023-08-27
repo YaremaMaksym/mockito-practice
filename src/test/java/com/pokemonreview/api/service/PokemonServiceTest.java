@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -57,5 +59,24 @@ public class PokemonServiceTest {
 
         // Then
         assertThat(pokemonsReturn).isNotNull();
+    }
+
+    @Test
+    void getPokemonById_ReturnsResponseDto() {
+        // Given
+        int id = 10;
+        Pokemon pokemon = Pokemon.builder()
+                .name("Pikachu")
+                .type("Electric").build();
+
+        // When
+        when(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .thenReturn(Optional.of(pokemon));
+
+        PokemonDto pokemonReturn = pokemonService.getPokemonById(id);
+
+        // Then
+        assertThat(pokemonReturn).usingRecursiveComparison()
+                .isEqualTo(pokemon);
     }
 }
