@@ -20,7 +20,7 @@ class PokemonRepositoryTest {
     private PokemonRepository pokemonRepository;
 
     @Test
-    void itShouldSavePokemon() {
+    void save_ReturnSavedPokemon() {
         // Given
         Pokemon pokemon = Pokemon.builder()
                 .name("Pikachu")
@@ -35,7 +35,7 @@ class PokemonRepositoryTest {
     }
 
     @Test
-    void itShouldReturnMoreThanOnePokemon() {
+    void findAll_ReturnMoreThanOnePokemon() {
         // Given
         Pokemon pokemon1 = Pokemon.builder()
                 .name("Pikachu1")
@@ -57,7 +57,7 @@ class PokemonRepositoryTest {
     }
 
     @Test
-    void itShouldFindPokemonById() {
+    void findById_FindPokemonById() {
         // Given
         Pokemon pokemon = Pokemon.builder()
                 .name("Pikachu")
