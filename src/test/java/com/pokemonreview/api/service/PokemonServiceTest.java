@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -106,5 +107,21 @@ public class PokemonServiceTest {
         // Then
         assertThat(pokemonReturn).usingRecursiveComparison()
                 .isEqualTo(pokemonDtoUpdated);
+    }
+
+    @Test
+    void deletePokemonById_ReturnsResponseDto() {
+        // Given
+        int id = 10;
+        Pokemon pokemon = Pokemon.builder()
+                .name("Pikachu")
+                .type("Electric").build();
+
+        // When
+        when(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .thenReturn(Optional.of(pokemon));
+
+        // Then
+        assertAll(() -> pokemonService.deletePokemonId(id));
     }
 }
