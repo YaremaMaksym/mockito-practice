@@ -1,6 +1,5 @@
 package com.pokemonreview.api.repository;
 
-import com.pokemonreview.api.models.Pokemon;
 import com.pokemonreview.api.models.Review;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -79,5 +79,47 @@ class ReviewRepositoryTest {
         // Then
         assertThat(reviewReturn).usingRecursiveComparison()
                 .isEqualTo(review);
+    }
+
+    @Test
+    void update_ReturnUpdatedReview() {
+        // Given
+        Review review = Review.builder()
+                .title("Title")
+                .content("Content")
+                .stars(5)
+                .build();
+
+        reviewRepository.save(review);
+
+        Review reviewUpdate = reviewRepository.findById(review.getId()).get();
+        reviewUpdate.setTitle("New Title");
+        reviewUpdate.setContent("New Content");
+
+        // When
+        Review reviewReturn = reviewRepository.save(reviewUpdate);
+
+        // Then
+        assertThat(reviewReturn).usingRecursiveComparison()
+                .isEqualTo(reviewUpdate);
+    }
+
+    @Test
+    void deleteById_ReturnReviewIsEmpty() {
+        // Given
+        Review review = Review.builder()
+                .title("Title")
+                .content("Content")
+                .stars(5)
+                .build();
+
+        reviewRepository.save(review);
+
+        // When
+        reviewRepository.deleteById(review.getId());
+        Optional<Review> reviewReturn = reviewRepository.findById(review.getId());
+
+        // Then
+        assertThat(reviewReturn).isEmpty();
     }
 }
