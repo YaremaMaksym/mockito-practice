@@ -72,4 +72,42 @@ class PokemonRepositoryTest {
         assertThat(pokemonReturn).usingRecursiveComparison()
                 .isEqualTo(pokemon);
     }
+
+    @Test
+    void update_ReturnUpdatedPokemon() {
+        // Given
+        Pokemon pokemon = Pokemon.builder()
+                .name("Pikachu")
+                .type("Electric").build();
+
+        pokemonRepository.save(pokemon);
+
+        Pokemon pokemonUpdate = pokemonRepository.findById(pokemon.getId()).get();
+        pokemonUpdate.setType("Electric");
+        pokemonUpdate.setName("Raichu");
+
+        // When
+        Pokemon pokemonReturn = pokemonRepository.save(pokemonUpdate);
+
+        // Then
+        assertThat(pokemonReturn).usingRecursiveComparison()
+                .isEqualTo(pokemonUpdate);
+    }
+
+    @Test
+    void deleteById_ReturnPokemonIsEmpty() {
+        // Given
+        Pokemon pokemon = Pokemon.builder()
+                .name("Pikachu")
+                .type("Electric").build();
+
+        pokemonRepository.save(pokemon);
+
+        // When
+        pokemonRepository.deleteById(pokemon.getId());
+        Optional<Pokemon> pokemonReturn = pokemonRepository.findById(pokemon.getId());
+
+        // Then
+        assertThat(pokemonReturn).isEmpty();
+    }
 }
