@@ -1,6 +1,7 @@
 package com.pokemonreview.api.service;
 
 import com.pokemonreview.api.dto.PokemonDto;
+import com.pokemonreview.api.dto.PokemonResponse;
 import com.pokemonreview.api.models.Pokemon;
 import com.pokemonreview.api.repository.PokemonRepository;
 import com.pokemonreview.api.service.impl.PokemonServiceImpl;
@@ -10,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
@@ -40,5 +43,19 @@ public class PokemonServiceTest {
         // Then
         assertThat(savedPokemon).usingRecursiveComparison()
                 .isEqualTo(pokemonDto);
+    }
+
+    @Test
+    void getAllPokemon_ReturnsResponseDto() {
+        // Given
+        Page<Pokemon> pokemons = Mockito.mock(Page.class);
+
+        // When
+        when(pokemonRepository.findAll(Mockito.any(Pageable.class))).thenReturn(pokemons);
+
+        PokemonResponse pokemonsReturn = pokemonService.getAllPokemon(1, 20);
+
+        // Then
+        assertThat(pokemonsReturn).isNotNull();
     }
 }
