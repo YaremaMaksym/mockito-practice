@@ -12,9 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceImplTest {
@@ -37,6 +42,23 @@ class ReviewServiceImplTest {
         reviewDto = ReviewDto.builder().title("Title").content("Content").stars(5).build();
         pokemon = Pokemon.builder().name("Pikachu").type("Electric").build();
         pokemonDto = PokemonDto.builder().name("Pikachu").type("Electric").build();
+    }
+
+    @Test
+    void createReview_ReturnsReviewDto() {
+        // Given
+
+        // When
+        when(pokemonRepository.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(pokemon));
+        when(reviewRepository.save(Mockito.any(Review.class)))
+                .thenReturn(review);
+
+        ReviewDto savedReview = reviewService.createReview(pokemon.getId(), reviewDto);
+
+        // Then
+        assertThat(savedReview).usingRecursiveComparison()
+                .isEqualTo(review);
     }
 
 }
