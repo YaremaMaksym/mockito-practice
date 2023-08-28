@@ -27,16 +27,16 @@ class ReviewServiceImplTest {
     private ReviewServiceImpl reviewService;
 
     private Review review;
-    private RegisterDto registerDto;
+    private ReviewDto reviewDto;
     private Pokemon pokemon;
     private PokemonDto pokemonDto;
 
     @BeforeEach
     void setUp() {
-        Review review = Review.builder().title("Title").content("Content").stars(5).build();
-        ReviewDto reviewDto = ReviewDto.builder().title("Title").content("Content").stars(5).build();
-        Pokemon pokemon = Pokemon.builder().name("Pikachu").type("Electric").build();
-        PokemonDto pokemonDto = PokemonDto.builder().name("Pikachu").type("Electric").build();
+        review = Review.builder().title("Title").content("Content").stars(5).build();
+        reviewDto = ReviewDto.builder().title("Title").content("Content").stars(5).build();
+        pokemon = Pokemon.builder().name("Pikachu").type("Electric").build();
+        pokemonDto = PokemonDto.builder().name("Pikachu").type("Electric").build();
     }
 
 }
