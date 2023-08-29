@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class PokemonServiceTest {
@@ -38,9 +38,9 @@ public class PokemonServiceTest {
         PokemonDto pokemonDto = PokemonDto.builder()
                 .name("Pikachu")
                 .type("Electric").build();
+        given(pokemonRepository.save(Mockito.any(Pokemon.class))).willReturn(pokemon);
 
         // When
-        when(pokemonRepository.save(Mockito.any(Pokemon.class))).thenReturn(pokemon);
         PokemonDto savedPokemon = pokemonService.createPokemon(pokemonDto);
 
         // Then
@@ -52,10 +52,9 @@ public class PokemonServiceTest {
     void getAllPokemon_ReturnsResponseDto() {
         // Given
         Page<Pokemon> pokemons = Mockito.mock(Page.class);
+        given(pokemonRepository.findAll(Mockito.any(Pageable.class))).willReturn(pokemons);
 
         // When
-        when(pokemonRepository.findAll(Mockito.any(Pageable.class))).thenReturn(pokemons);
-
         PokemonResponse pokemonsReturn = pokemonService.getAllPokemon(1, 20);
 
         // Then
@@ -69,11 +68,10 @@ public class PokemonServiceTest {
         Pokemon pokemon = Pokemon.builder()
                 .name("Pikachu")
                 .type("Electric").build();
+        given(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.of(pokemon));
 
         // When
-        when(pokemonRepository.findById(Mockito.any(Integer.class)))
-                .thenReturn(Optional.of(pokemon));
-
         PokemonDto pokemonReturn = pokemonService.getPokemonById(id);
 
         // Then
@@ -95,13 +93,12 @@ public class PokemonServiceTest {
                 .name("Raichu")
                 .type("Electric").build();
 
+        given(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.ofNullable(pokemon));
+        given(pokemonRepository.save(Mockito.any(Pokemon.class)))
+                .willReturn(pokemonUpdated);
+
         // When
-        when(pokemonRepository.findById(Mockito.any(Integer.class)))
-                .thenReturn(Optional.ofNullable(pokemon));
-
-        when(pokemonRepository.save(Mockito.any(Pokemon.class)))
-                .thenReturn(pokemonUpdated);
-
         PokemonDto pokemonReturn = pokemonService.updatePokemon(pokemonDtoUpdated, id);
 
         // Then
@@ -117,9 +114,10 @@ public class PokemonServiceTest {
                 .name("Pikachu")
                 .type("Electric").build();
 
+        given(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.of(pokemon));
+
         // When
-        when(pokemonRepository.findById(Mockito.any(Integer.class)))
-                .thenReturn(Optional.of(pokemon));
 
         // Then
         assertAll(() -> pokemonService.deletePokemonId(id));
