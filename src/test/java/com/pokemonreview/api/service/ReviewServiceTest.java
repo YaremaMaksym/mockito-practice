@@ -75,4 +75,24 @@ class ReviewServiceTest {
         assertThat(reviewDtos).isNotNull();
     }
 
+    @Test
+    void getReviewById_ReturnsNotNullReviewDto() {
+        // Given
+        int pokemonId = pokemon.getId();
+        int reviewId = review.getId();
+
+        review.setPokemon(pokemon);
+
+        given(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.of(pokemon));
+        given(reviewRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.of(review));
+
+        // When
+        ReviewDto reviewDtoReturn = reviewService.getReviewById(reviewId, pokemonId);
+
+        // Then
+        assertThat(reviewDtoReturn).isNotNull();
+    }
+
 }
