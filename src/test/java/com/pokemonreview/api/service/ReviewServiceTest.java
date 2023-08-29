@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -58,6 +60,19 @@ class ReviewServiceTest {
         // Then
         assertThat(savedReview).usingRecursiveComparison()
                 .isEqualTo(review);
+    }
+
+    @Test
+    void getReviewsByPokemonId_ReturnsReviewDto() {
+        // Given
+        given(reviewRepository.findByPokemonId(Mockito.any(Integer.class)))
+                .willReturn(Arrays.asList(review));
+
+        // When
+        List<ReviewDto> reviewDtos = reviewService.getReviewsByPokemonId(pokemon.getId());
+
+        // Then
+        assertThat(reviewDtos).isNotNull();
     }
 
 }
