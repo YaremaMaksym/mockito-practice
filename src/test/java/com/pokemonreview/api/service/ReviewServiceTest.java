@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,13 +47,12 @@ class ReviewServiceTest {
     @Test
     void createReview_ReturnsReviewDto() {
         // Given
+        given(pokemonRepository.findById(Mockito.anyInt()))
+                .willReturn(Optional.of(pokemon));
+        given(reviewRepository.save(Mockito.any(Review.class)))
+                .willReturn(review);
 
         // When
-        when(pokemonRepository.findById(Mockito.anyInt()))
-                .thenReturn(Optional.of(pokemon));
-        when(reviewRepository.save(Mockito.any(Review.class)))
-                .thenReturn(review);
-
         ReviewDto savedReview = reviewService.createReview(pokemon.getId(), reviewDto);
 
         // Then
