@@ -63,7 +63,7 @@ class ReviewServiceTest {
     }
 
     @Test
-    void getReviewsByPokemonId_ReturnsReviewDto() {
+    void getReviewsByPokemonId_ReturnsNotNullListOfReviewDto() {
         // Given
         given(reviewRepository.findByPokemonId(Mockito.any(Integer.class)))
                 .willReturn(Arrays.asList(review));
