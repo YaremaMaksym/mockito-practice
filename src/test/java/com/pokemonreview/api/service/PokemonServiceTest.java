@@ -49,7 +49,7 @@ public class PokemonServiceTest {
     }
 
     @Test
-    void getAllPokemon_ReturnsResponseDto() {
+    void getAllPokemon_ReturnsNotNullResponseDto() {
         // Given
         Page<Pokemon> pokemons = Mockito.mock(Page.class);
         given(pokemonRepository.findAll(Mockito.any(Pageable.class))).willReturn(pokemons);
