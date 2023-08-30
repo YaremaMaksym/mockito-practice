@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -116,6 +117,27 @@ class ReviewServiceTest {
         // Then
         assertThat(reviewDtoReturn).usingRecursiveComparison()
                 .isEqualTo(reviewDto);
+    }
+
+    @Test
+    void deleteReview_ReturnsReviewDto() {
+        // Given
+        int pokemonId = pokemon.getId();
+        int reviewId = review.getId();
+
+        pokemon.setReviews(Arrays.asList(review));
+        review.setPokemon(pokemon);
+
+        given(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.of(pokemon));
+        given(reviewRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.of(review));
+
+        // When
+
+
+        // Then
+        assertAll(() -> reviewService.deleteReview(pokemonId, reviewId));
     }
 
 
