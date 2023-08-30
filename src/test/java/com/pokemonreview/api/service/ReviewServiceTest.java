@@ -21,7 +21,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
@@ -94,5 +93,30 @@ class ReviewServiceTest {
         // Then
         assertThat(reviewDtoReturn).isNotNull();
     }
+
+    @Test
+    void updateReview_ReturnsReviewDto() {
+        // Given
+        int pokemonId = pokemon.getId();
+        int reviewId = review.getId();
+
+        pokemon.setReviews(Arrays.asList(review));
+        review.setPokemon(pokemon);
+
+        given(pokemonRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.of(pokemon));
+        given(reviewRepository.findById(Mockito.any(Integer.class)))
+                .willReturn(Optional.of(review));
+        given(reviewRepository.save(Mockito.any(Review.class)))
+                .willReturn(review);
+
+        // When
+        ReviewDto reviewDtoReturn = reviewService.updateReview(pokemonId, reviewId, reviewDto);
+
+        // Then
+        assertThat(reviewDtoReturn).usingRecursiveComparison()
+                .isEqualTo(reviewDto);
+    }
+
 
 }
